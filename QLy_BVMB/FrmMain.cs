@@ -113,5 +113,10 @@ namespace QLy_BVMB
         {
 
         }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

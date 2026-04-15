@@ -16,5 +16,10 @@ namespace QLy_BVMB
         {
             InitializeComponent();
         }
+
+        private void FrmBaoCaoGheTrong_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

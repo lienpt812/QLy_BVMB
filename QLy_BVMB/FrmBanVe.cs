@@ -14,7 +14,30 @@ namespace QLy_BVMB
     {
         public FrmBanVe()
         {
-            InitializeComponent();
+      //      InitializeComponent();
+        }
+
+        private void FrmBanVe_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // FrmBanVe
+            // 
+            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.Name = "FrmBanVe";
+            this.Load += new System.EventHandler(this.FrmBanVe_Load_1);
+            this.ResumeLayout(false);
+
+        }
+
+        private void FrmBanVe_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
