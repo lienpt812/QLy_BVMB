@@ -187,6 +187,9 @@
     <EmbeddedResource Include="FrmGiaVe.resx">
       <DependentUpon>FrmGiaVe.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmHanhLy.resx">
+      <DependentUpon>FrmHanhLy.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
