@@ -16,7 +16,7 @@ namespace QLy_BVMB
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmDangNhap());
+            Application.Run(new FrmSanBay());
         }
     }
 }

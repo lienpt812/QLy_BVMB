@@ -1,0 +1,1293 @@
+﻿CREATE DATABASE SQL2_NHOM06_QLy_BVMB;
+
+USE SQL2_NHOM06_QLy_BVMB;
+
+
+/* =========================================================
+   1. TẠO BẢNG
+========================================================= */
+
+CREATE TABLE SANBAY
+(
+    MaSanBay VARCHAR(10) PRIMARY KEY NOT NULL,
+    TenSanBay NVARCHAR(100) NOT NULL,
+    ThanhPho NVARCHAR(100),
+    QuocGia NVARCHAR(100)
+);
+
+
+CREATE TABLE MAYBAY
+(
+    MaMayBay VARCHAR(10) PRIMARY KEY NOT NULL,
+    HangHangKhong NVARCHAR(100) NOT NULL,
+    SoLuongGhe INT NOT NULL CHECK (SoLuongGhe > 0)
+);
+
+
+CREATE TABLE CHUYENBAY
+(
+    MaCB VARCHAR(10) PRIMARY KEY NOT NULL,
+    MaMayBay VARCHAR(10) NOT NULL REFERENCES MAYBAY(MaMayBay),
+    SanBayDi VARCHAR(10) NOT NULL REFERENCES SANBAY(MaSanBay),
+    SanBayDen VARCHAR(10) NOT NULL REFERENCES SANBAY(MaSanBay),
+    NgayGioDi DATETIME NOT NULL,
+    NgayGioDen DATETIME NOT NULL,
+    TrangThai NVARCHAR(50) NOT NULL,
+    CONSTRAINT CK_CHUYENBAY_THOIGIAN CHECK (NgayGioDen > NgayGioDi),
+    CONSTRAINT CK_CHUYENBAY_TRANGTHAI CHECK (TrangThai IN (N'Đang mở bán', N'Đã cất cánh', N'Đã hạ cánh', N'Hết vé', N'Hủy'))
+);
+
+
+CREATE TABLE HANHKHACH
+(
+    MaHK VARCHAR(10) PRIMARY KEY NOT NULL,
+    HoTen NVARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    SDT VARCHAR(15),
+    CCCD VARCHAR(20) UNIQUE,
+    NgaySinh DATE
+);
+
+
+CREATE TABLE VECHUYENBAY
+(
+    MaVe VARCHAR(15) PRIMARY KEY NOT NULL,
+    MaHK VARCHAR(10) NOT NULL REFERENCES HANHKHACH(MaHK),
+    MaCB VARCHAR(10) NOT NULL REFERENCES CHUYENBAY(MaCB),
+    MaGhe VARCHAR(10) NOT NULL,
+    ThoiGianDat DATETIME NOT NULL
+);
+
+
+CREATE TABLE GHE
+(
+    MaGhe VARCHAR(10) NOT NULL,
+    MaMayBay VARCHAR(10) NOT NULL REFERENCES MAYBAY(MaMayBay),
+    LoaiGhe NVARCHAR(50) NOT NULL,
+    PRIMARY KEY (MaGhe, MaMayBay),
+    CONSTRAINT CK_GHE_LOAIGHE CHECK (LoaiGhe IN (N'Phổ thông', N'Thương gia'))
+);
+
+
+CREATE TABLE GIAVE
+(
+    MaCB VARCHAR(10) NOT NULL REFERENCES CHUYENBAY(MaCB),
+    LoaiGhe NVARCHAR(50) NOT NULL,
+    Gia DECIMAL(18,2) NOT NULL,
+    PRIMARY KEY (MaCB, LoaiGhe),
+    CONSTRAINT CK_GIAVE_GIA CHECK (Gia >= 0),
+    CONSTRAINT CK_GIAVE_LOAIGHE CHECK (LoaiGhe IN (N'Phổ thông', N'Thương gia'))
+);
+GO
+
+CREATE TABLE HANHLY
+(
+    MaHanhLy INT PRIMARY KEY NOT NULL,
+    MaVe VARCHAR(15) NOT NULL REFERENCES VECHUYENBAY(MaVe),
+    KhoiLuongKg INT NOT NULL,
+    PhiThem DECIMAL(18,2) NOT NULL,
+    CONSTRAINT CK_HANHLY_KHOILUONG CHECK (KhoiLuongKg >= 0 AND KhoiLuongKg <= 35),
+    CONSTRAINT CK_HANHLY_PHITHEM CHECK (PhiThem >= 0)
+);
+
+
+CREATE TABLE THANHTOAN
+(
+    MaThanhToan INT PRIMARY KEY NOT NULL,
+    MaVe VARCHAR(15) NOT NULL REFERENCES VECHUYENBAY(MaVe),
+    PhuongThuc NVARCHAR(50),
+    TongTien DECIMAL(18,2) NOT NULL CHECK (TongTien >= 0)
+);
+
+SELECT * FROM SANBAY;
+SELECT * FROM MAYBAY;
+SELECT * FROM CHUYENBAY;
+SELECT * FROM HANHKHACH;
+SELECT * FROM GHE;
+SELECT * FROM VECHUYENBAY;
+SELECT * FROM GIAVE;
+SELECT * FROM HANHLY;
+SELECT * FROM THANHTOAN;
+/* =========================================================
+   2. DỮ LIỆU MẪU
+========================================================= */
+
+INSERT INTO SANBAY VALUES('SBN', N'Nội Bài', N'Hà Nội', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBT', N'Tân Sơn Nhất', N'TP. Hồ Chí Minh', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBD', N'Đà Nẵng', N'Đà Nẵng', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBC', N'Cần Thơ', N'Cần Thơ', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBH', N'Phú Bài', N'Huế', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBP', N'Phú Quốc', N'Kiên Giang', N'Việt Nam');
+INSERT INTO SANBAY VALUES('SBL', N'Liên Khương', N'Lâm Đồng', N'Việt Nam');
+
+
+INSERT INTO MAYBAY VALUES('MB01', N'Vietnam Airlines', 180);
+INSERT INTO MAYBAY VALUES('MB02', N'VietJet Air', 200);
+INSERT INTO MAYBAY VALUES('MB03', N'Bamboo Airways', 160);
+INSERT INTO MAYBAY VALUES('MB04', N'Pacific Airlines', 150);
+INSERT INTO MAYBAY VALUES('MB05', N'Vietnam Airlines', 220);
+INSERT INTO MAYBAY VALUES('MB06', N'Vietravel Airlines', 140);
+INSERT INTO MAYBAY VALUES('MB07', N'Vietnam Airlines', 250);
+
+
+INSERT INTO CHUYENBAY VALUES('CB01', 'MB01', 'SBH', 'SBN', '2025-04-20 08:30:00', '2025-04-20 10:30:00', N'Đang mở bán');
+INSERT INTO CHUYENBAY VALUES('CB02', 'MB02', 'SBN', 'SBH', '2025-04-21 15:00:00', '2025-04-21 17:00:00', N'Đã cất cánh');
+INSERT INTO CHUYENBAY VALUES('CB03', 'MB03', 'SBH', 'SBD', '2025-04-22 09:45:00', '2025-04-22 11:15:00', N'Đã hạ cánh');
+INSERT INTO CHUYENBAY VALUES('CB04', 'MB04', 'SBD', 'SBH', '2025-04-23 06:00:00', '2025-04-23 07:30:00', N'Hết vé');
+INSERT INTO CHUYENBAY VALUES('CB05', 'MB05', 'SBN', 'SBD', '2025-04-24 13:00:00', '2025-04-24 14:30:00', N'Đang mở bán');
+INSERT INTO CHUYENBAY VALUES('CB06', 'MB06', 'SBH', 'SBP', '2025-04-25 07:00:00', '2025-04-25 09:00:00', N'Hủy');
+INSERT INTO CHUYENBAY VALUES('CB07', 'MB07', 'SBT', 'SBH', '2025-04-26 18:00:00', '2025-04-26 20:00:00', N'Đang mở bán');
+INSERT INTO CHUYENBAY VALUES('CB08', 'MB01', 'SBP', 'SBN', '2025-04-27 10:00:00', '2025-04-27 12:00:00', N'Hết vé');
+INSERT INTO CHUYENBAY VALUES('CB09', 'MB03', 'SBD', 'SBP', '2025-04-28 05:30:00', '2025-04-28 07:30:00', N'Đã cất cánh');
+INSERT INTO CHUYENBAY VALUES('CB10', 'MB05', 'SBT', 'SBH', '2025-04-29 22:00:00', '2025-04-30 00:00:00', N'Đã hạ cánh');
+
+
+INSERT INTO HANHKHACH VALUES('HK01', N'Nguyễn Văn An', 'annguyen@gmail.com', '0901234567', '001234567890', '1995-05-21');
+INSERT INTO HANHKHACH VALUES('HK02', N'Lê Thị Bình', 'binhle@yahoo.com', '0907654321', '001234567891', '1988-11-05');
+INSERT INTO HANHKHACH VALUES('HK03', N'Trần Quốc Cường', 'cuongtran@gmail.com', '0988765432', '001234567892', '2000-03-14');
+INSERT INTO HANHKHACH VALUES('HK04', N'Phạm Thị Dung', 'dungpham@gmail.com', '0912345678', '001234567893', '1992-09-08');
+INSERT INTO HANHKHACH VALUES('HK05', N'Vũ Minh Hằng', 'hangvu@gmail.com', '0932123456', '001234567894', '1990-01-25');
+INSERT INTO HANHKHACH VALUES('HK06', N'Hồ Văn Huy', 'huyho@gmail.com', '0945432167', '001234567895', '1998-06-17');
+INSERT INTO HANHKHACH VALUES('HK07', N'Đỗ Kim Lan', 'lando@gmail.com', '0977765432', '001234567896', '1996-07-30');
+INSERT INTO HANHKHACH VALUES('HK08', N'Bùi Văn Minh', 'minhbui@gmail.com', '0961234567', '001234567897', '1985-12-12');
+INSERT INTO HANHKHACH VALUES('HK09', N'Trịnh Thị Ngọc', 'ngoctrinh@gmail.com', '0959876543', '001234567898', '1993-04-18');
+INSERT INTO HANHKHACH VALUES('HK10', N'Ngô Bá Quý', 'quyngo@gmail.com', '0923456789', '001234567899', '1997-10-10');
+
+
+INSERT INTO GHE VALUES('1A', 'MB01', N'Phổ thông');
+INSERT INTO GHE VALUES('1B', 'MB01', N'Thương gia');
+INSERT INTO GHE VALUES('1C', 'MB01', N'Phổ thông');
+INSERT INTO GHE VALUES('1D', 'MB01', N'Thương gia');
+INSERT INTO GHE VALUES('2A', 'MB02', N'Phổ thông');
+INSERT INTO GHE VALUES('2B', 'MB02', N'Thương gia');
+INSERT INTO GHE VALUES('3A', 'MB03', N'Phổ thông');
+INSERT INTO GHE VALUES('3C', 'MB03', N'Phổ thông');
+INSERT INTO GHE VALUES('4A', 'MB04', N'Thương gia');
+INSERT INTO GHE VALUES('4B', 'MB04', N'Thương gia');
+INSERT INTO GHE VALUES('5B', 'MB05', N'Phổ thông');
+INSERT INTO GHE VALUES('5C', 'MB05', N'Thương gia');
+INSERT INTO GHE VALUES('5D', 'MB05', N'Phổ thông');
+INSERT INTO GHE VALUES('6A', 'MB06', N'Phổ thông');
+INSERT INTO GHE VALUES('7B', 'MB07', N'Phổ thông');
+INSERT INTO GHE VALUES('7C', 'MB07', N'Thương gia');
+
+
+INSERT INTO VECHUYENBAY VALUES('VE001', 'HK01', 'CB01', '1A', '2025-04-10 14:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE002', 'HK02', 'CB01', '1B', '2025-04-10 14:05:00');
+INSERT INTO VECHUYENBAY VALUES('VE003', 'HK03', 'CB02', '2A', '2025-04-11 09:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE004', 'HK04', 'CB03', '3C', '2025-04-12 10:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE005', 'HK05', 'CB04', '4A', '2025-04-12 11:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE006', 'HK06', 'CB05', '5B', '2025-04-13 08:30:00');
+INSERT INTO VECHUYENBAY VALUES('VE007', 'HK07', 'CB05', '5C', '2025-04-13 08:35:00');
+INSERT INTO VECHUYENBAY VALUES('VE008', 'HK08', 'CB06', '6A', '2025-04-14 09:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE009', 'HK09', 'CB07', '7B', '2025-04-14 09:15:00');
+INSERT INTO VECHUYENBAY VALUES('VE010', 'HK10', 'CB07', '7C', '2025-04-14 09:30:00');
+INSERT INTO VECHUYENBAY VALUES('VE011', 'HK01', 'CB01', '1C', '2025-04-14 10:00:00');
+INSERT INTO VECHUYENBAY VALUES('VE012', 'HK02', 'CB01', '1D', '2025-04-14 10:15:00');
+INSERT INTO VECHUYENBAY VALUES('VE013', 'HK03', 'CB02', '2B', '2025-04-14 10:30:00');
+INSERT INTO VECHUYENBAY VALUES('VE014', 'HK04', 'CB04', '4B', '2025-04-14 10:45:00');
+INSERT INTO VECHUYENBAY VALUES('VE015', 'HK05', 'CB05', '5D', '2025-04-14 11:00:00');
+
+
+INSERT INTO GIAVE VALUES('CB01', N'Phổ thông', 1500000);
+INSERT INTO GIAVE VALUES('CB01', N'Thương gia', 2500000);
+INSERT INTO GIAVE VALUES('CB02', N'Phổ thông', 1600000);
+INSERT INTO GIAVE VALUES('CB02', N'Thương gia', 2500000);
+INSERT INTO GIAVE VALUES('CB03', N'Phổ thông', 1800000);
+INSERT INTO GIAVE VALUES('CB03', N'Thương gia', 2500000);
+INSERT INTO GIAVE VALUES('CB04', N'Thương gia', 2600000);
+INSERT INTO GIAVE VALUES('CB04', N'Phổ thông', 1900000);
+INSERT INTO GIAVE VALUES('CB05', N'Phổ thông', 1700000);
+INSERT INTO GIAVE VALUES('CB05', N'Thương gia', 2300000);
+INSERT INTO GIAVE VALUES('CB06', N'Phổ thông', 1650000);
+INSERT INTO GIAVE VALUES('CB06', N'Thương gia', 2000000);
+INSERT INTO GIAVE VALUES('CB07', N'Phổ thông', 1750000);
+INSERT INTO GIAVE VALUES('CB07', N'Thương gia', 2200000);
+INSERT INTO GIAVE VALUES('CB08', N'Phổ thông', 1800000);
+INSERT INTO GIAVE VALUES('CB08', N'Thương gia', 2100000);
+INSERT INTO GIAVE VALUES('CB09', N'Phổ thông', 1600000);
+INSERT INTO GIAVE VALUES('CB09', N'Thương gia', 2500000);
+INSERT INTO GIAVE VALUES('CB10', N'Phổ thông', 1550000);
+INSERT INTO GIAVE VALUES('CB10', N'Thương gia', 2600000);
+
+
+INSERT INTO HANHLY VALUES(1, 'VE001', 15, 0);
+INSERT INTO HANHLY VALUES(2, 'VE002', 23, 0);
+INSERT INTO HANHLY VALUES(3, 'VE003', 30, 200000);
+INSERT INTO HANHLY VALUES(4, 'VE004', 20, 0);
+INSERT INTO HANHLY VALUES(5, 'VE005', 32, 300000);
+INSERT INTO HANHLY VALUES(6, 'VE006', 10, 0);
+INSERT INTO HANHLY VALUES(7, 'VE007', 25, 100000);
+INSERT INTO HANHLY VALUES(8, 'VE008', 35, 400000);
+INSERT INTO HANHLY VALUES(9, 'VE009', 18, 0);
+INSERT INTO HANHLY VALUES(10, 'VE010', 22, 0);
+INSERT INTO HANHLY VALUES(11, 'VE011', 15, 0);
+INSERT INTO HANHLY VALUES(12, 'VE012', 23, 0);
+INSERT INTO HANHLY VALUES(13, 'VE013', 30, 200000);
+INSERT INTO HANHLY VALUES(14, 'VE014', 20, 0);
+INSERT INTO HANHLY VALUES(15, 'VE015', 32, 300000);
+
+
+INSERT INTO THANHTOAN VALUES (1, 'VE001', N'VietQR', 0);
+INSERT INTO THANHTOAN VALUES (2, 'VE002', N'ATM/Mobile Banking', 0);
+INSERT INTO THANHTOAN VALUES (3, 'VE003', N'Trả góp thẻ tín dụng', 0);
+INSERT INTO THANHTOAN VALUES (4, 'VE004', N'Thẻ thanh toán', 0);
+INSERT INTO THANHTOAN VALUES (5, 'VE005', N'Tại cửa hàng', 0);
+INSERT INTO THANHTOAN VALUES (6, 'VE006', N'Ví điện tử', 0);
+INSERT INTO THANHTOAN VALUES (7, 'VE007', N'VietQR', 0);
+INSERT INTO THANHTOAN VALUES (8, 'VE008', N'ATM/Mobile Banking', 0);
+INSERT INTO THANHTOAN VALUES (9, 'VE009', N'Trả góp thẻ tín dụng', 0);
+INSERT INTO THANHTOAN VALUES (10, 'VE010', N'Thẻ thanh toán', 0);
+INSERT INTO THANHTOAN VALUES (11, 'VE011', N'Tại cửa hàng', 0);
+INSERT INTO THANHTOAN VALUES (12, 'VE012', N'Ví điện tử', 0);
+INSERT INTO THANHTOAN VALUES (13, 'VE013', N'VietQR', 0);
+INSERT INTO THANHTOAN VALUES (14, 'VE014', N'ATM/Mobile Banking', 0);
+INSERT INTO THANHTOAN VALUES (15, 'VE015', N'Trả góp thẻ tín dụng', 0);
+
+
+/* =========================================================
+   3. VIEW
+========================================================= */
+
+CREATE VIEW V_THONGKE_VE
+AS
+SELECT
+    VECHUYENBAY.MaVe,
+    HANHKHACH.MaHK,
+    HANHKHACH.HoTen,
+    CHUYENBAY.MaCB,
+    CHUYENBAY.NgayGioDi,
+    THANHTOAN.PhuongThuc,
+    THANHTOAN.TongTien
+FROM VECHUYENBAY, HANHKHACH, CHUYENBAY, THANHTOAN
+WHERE VECHUYENBAY.MaHK = HANHKHACH.MaHK
+  AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+  AND VECHUYENBAY.MaVe = THANHTOAN.MaVe;
+
+SELECT * FROM V_THONGKE_VE;
+SELECT * FROM V_THONGKE_VE WHERE TongTien > 2000000;
+
+CREATE VIEW V_CHUYENBAY_DONG_KHACH
+AS
+SELECT
+    CHUYENBAY.MaCB,
+    CHUYENBAY.SanBayDi,
+    CHUYENBAY.SanBayDen,
+    CHUYENBAY.NgayGioDi,
+    COUNT(VECHUYENBAY.MaVe) AS SoVe
+FROM CHUYENBAY, VECHUYENBAY
+WHERE CHUYENBAY.MaCB = VECHUYENBAY.MaCB
+GROUP BY CHUYENBAY.MaCB, CHUYENBAY.SanBayDi, CHUYENBAY.SanBayDen, CHUYENBAY.NgayGioDi;
+
+SELECT * FROM V_CHUYENBAY_DONG_KHACH;
+SELECT * FROM V_CHUYENBAY_DONG_KHACH WHERE SoVe >= 2;
+
+CREATE VIEW V_KHACH_GUI_HANHLY
+AS
+SELECT
+    HANHKHACH.MaHK,
+    HANHKHACH.HoTen,
+    VECHUYENBAY.MaVe,
+    HANHLY.KhoiLuongKg,
+    HANHLY.PhiThem
+FROM HANHKHACH, VECHUYENBAY, HANHLY
+WHERE HANHKHACH.MaHK = VECHUYENBAY.MaHK
+  AND VECHUYENBAY.MaVe = HANHLY.MaVe;
+
+ SELECT * FROM V_KHACH_GUI_HANHLY;
+SELECT * FROM V_KHACH_GUI_HANHLY WHERE PhiThem = 0;
+SELECT * FROM V_KHACH_GUI_HANHLY WHERE PhiThem > 0;
+
+CREATE VIEW V_GHE_TRONG
+AS
+SELECT
+    GHE.MaMayBay,
+    GHE.MaGhe,
+    GHE.LoaiGhe
+FROM GHE
+WHERE NOT EXISTS
+(
+    SELECT *
+    FROM VECHUYENBAY, CHUYENBAY
+    WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+      AND VECHUYENBAY.MaGhe = GHE.MaGhe
+      AND CHUYENBAY.MaMayBay = GHE.MaMayBay
+);
+
+SELECT * FROM V_GHE_TRONG;
+SELECT * FROM V_GHE_TRONG WHERE MaMayBay = 'MB01';
+
+CREATE VIEW V_DOANH_THU_VE
+AS
+SELECT
+    CHUYENBAY.MaCB,
+    GIAVE.LoaiGhe,
+    GIAVE.Gia,
+    CHUYENBAY.NgayGioDi,
+    COUNT(VECHUYENBAY.MaVe) AS SoLuong,
+    COUNT(VECHUYENBAY.MaVe) * GIAVE.Gia AS TongTien
+FROM CHUYENBAY, GIAVE, GHE, VECHUYENBAY
+WHERE CHUYENBAY.MaCB = GIAVE.MaCB
+  AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+  AND VECHUYENBAY.MaGhe = GHE.MaGhe
+  AND GHE.MaMayBay = CHUYENBAY.MaMayBay
+  AND GHE.LoaiGhe = GIAVE.LoaiGhe
+GROUP BY CHUYENBAY.MaCB, GIAVE.LoaiGhe, GIAVE.Gia, CHUYENBAY.NgayGioDi;
+
+SELECT * FROM V_DOANH_THU_VE;
+SELECT * FROM V_DOANH_THU_VE WHERE TongTien > 2000000;
+
+CREATE VIEW V_KHACH_DAT_NHIEU_VE
+AS
+SELECT
+    HANHKHACH.MaHK,
+    HANHKHACH.HoTen,
+    COUNT(VECHUYENBAY.MaVe) AS SoLuongVe
+FROM HANHKHACH, VECHUYENBAY
+WHERE HANHKHACH.MaHK = VECHUYENBAY.MaHK
+GROUP BY HANHKHACH.MaHK, HANHKHACH.HoTen;
+
+SELECT * FROM V_KHACH_DAT_NHIEU_VE;
+SELECT * FROM V_KHACH_DAT_NHIEU_VE WHERE SoLuongVe >= 2;
+
+CREATE VIEW V_CHUYENBAY_HUY
+AS
+SELECT
+    CHUYENBAY.MaCB,
+    CHUYENBAY.SanBayDi,
+    CHUYENBAY.SanBayDen,
+    CHUYENBAY.NgayGioDi,
+    CHUYENBAY.TrangThai
+FROM CHUYENBAY
+WHERE CHUYENBAY.TrangThai = N'Hủy';
+
+SELECT * FROM V_CHUYENBAY_HUY;
+
+CREATE VIEW V_SOCHUYENBAY
+AS
+SELECT
+    MAYBAY.MaMayBay,
+    MAYBAY.HangHangKhong,
+    COUNT(CHUYENBAY.MaCB) AS SoChuyenBay
+FROM MAYBAY, CHUYENBAY
+WHERE MAYBAY.MaMayBay = CHUYENBAY.MaMayBay
+GROUP BY MAYBAY.MaMayBay, MAYBAY.HangHangKhong;
+
+SELECT * FROM V_SOCHUYENBAY;
+
+CREATE VIEW V_VE_BAN_THEO_NGAY
+AS
+SELECT
+    CONVERT(DATE, ThoiGianDat) AS Ngay,
+    COUNT(*) AS SoVeDaBan
+FROM VECHUYENBAY
+GROUP BY CONVERT(DATE, ThoiGianDat);
+
+SELECT * FROM V_VE_BAN_THEO_NGAY;
+
+
+CREATE VIEW V_CHUYENBAY_CHI_TIET
+AS
+SELECT
+    CHUYENBAY.MaCB,
+    (SELECT HangHangKhong FROM MAYBAY WHERE MAYBAY.MaMayBay = CHUYENBAY.MaMayBay) AS HangHangKhong,
+    (SELECT TenSanBay FROM SANBAY WHERE SANBAY.MaSanBay = CHUYENBAY.SanBayDi) AS TenSanBayDi,
+    (SELECT ThanhPho FROM SANBAY WHERE SANBAY.MaSanBay = CHUYENBAY.SanBayDi) AS ThanhPhoDi,
+    (SELECT TenSanBay FROM SANBAY WHERE SANBAY.MaSanBay = CHUYENBAY.SanBayDen) AS TenSanBayDen,
+    (SELECT ThanhPho FROM SANBAY WHERE SANBAY.MaSanBay = CHUYENBAY.SanBayDen) AS ThanhPhoDen,
+    CHUYENBAY.NgayGioDi,
+    CHUYENBAY.NgayGioDen,
+    CHUYENBAY.TrangThai
+FROM CHUYENBAY;
+
+SELECT * FROM V_CHUYENBAY_CHI_TIET;
+SELECT * FROM V_CHUYENBAY_CHI_TIET WHERE TrangThai = N'Đang mở bán';
+SELECT * FROM V_CHUYENBAY_CHI_TIET WHERE TrangThai = N'Đã hạ cánh';
+
+CREATE VIEW V_DOANH_THU_HANH_KHACH
+AS
+SELECT
+    HANHKHACH.MaHK,
+    HANHKHACH.HoTen,
+    (
+        SELECT SUM(THANHTOAN.TongTien)
+        FROM THANHTOAN
+        WHERE THANHTOAN.MaVe IN
+        (
+            SELECT VECHUYENBAY.MaVe
+            FROM VECHUYENBAY
+            WHERE VECHUYENBAY.MaHK = HANHKHACH.MaHK
+        )
+    ) AS TongDoanhThu
+FROM HANHKHACH;
+
+SELECT * FROM V_DOANH_THU_HANH_KHACH;
+SELECT * FROM V_DOANH_THU_HANH_KHACH WHERE TongDoanhThu > 3000000;
+
+/* =========================================================
+   4. TRIGGER
+========================================================= */
+
+CREATE TRIGGER TRG_CHECK_GHE
+ON VECHUYENBAY
+AFTER INSERT
+AS
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM VECHUYENBAY, INSERTED
+        WHERE VECHUYENBAY.MaCB = INSERTED.MaCB
+          AND VECHUYENBAY.MaGhe = INSERTED.MaGhe
+          AND VECHUYENBAY.MaVe <> INSERTED.MaVe
+    )
+    BEGIN
+        PRINT N'Ghế đã được đặt trên chuyến bay. Hủy thao tác.';
+        ROLLBACK TRANSACTION;
+    END
+END;
+
+INSERT INTO VECHUYENBAY (MaVe, MaHK, MaCB, MaGhe, ThoiGianDat)
+VALUES ('VE999', 'HK06', 'CB01', '1A', GETDATE());
+
+CREATE TRIGGER TRG_CHECK_HANHLY
+ON HANHLY
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    IF EXISTS
+    (
+        SELECT * FROM INSERTED WHERE KhoiLuongKg > 35
+    )
+    BEGIN
+        PRINT N'Hành lý vượt quá giới hạn 35kg. Hủy thao tác.';
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+    UPDATE HANHLY
+    SET PhiThem =
+        CASE
+            WHEN INSERTED.KhoiLuongKg BETWEEN 25 AND 29 THEN 100000
+            WHEN INSERTED.KhoiLuongKg = 30 THEN 200000
+            WHEN INSERTED.KhoiLuongKg BETWEEN 31 AND 34 THEN 300000
+            WHEN INSERTED.KhoiLuongKg = 35 THEN 400000
+            ELSE 0
+        END
+    FROM HANHLY, INSERTED
+    WHERE HANHLY.MaHanhLy = INSERTED.MaHanhLy;
+END;
+
+INSERT INTO HANHLY (MaHanhLy, MaVe, KhoiLuongKg, PhiThem)
+VALUES (999, 'VE001', 36, 0);
+
+CREATE TRIGGER TRG_CHECK_TONGTIEN
+ON THANHTOAN
+AFTER INSERT
+AS
+BEGIN
+    UPDATE THANHTOAN
+    SET TongTien =
+    (
+        SELECT GIAVE.Gia +
+               ISNULL(
+                    (SELECT HANHLY.PhiThem
+                     FROM HANHLY
+                     WHERE HANHLY.MaVe = VECHUYENBAY.MaVe), 0
+               )
+        FROM VECHUYENBAY, GHE, GIAVE, CHUYENBAY
+        WHERE VECHUYENBAY.MaVe = THANHTOAN.MaVe
+          AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaGhe = GHE.MaGhe
+          AND GHE.MaMayBay = CHUYENBAY.MaMayBay
+          AND GIAVE.MaCB = VECHUYENBAY.MaCB
+          AND GIAVE.LoaiGhe = GHE.LoaiGhe
+    )
+    FROM THANHTOAN, INSERTED
+    WHERE THANHTOAN.MaVe = INSERTED.MaVe;
+END;
+
+INSERT INTO VECHUYENBAY (MaVe, MaHK, MaCB, MaGhe, ThoiGianDat)
+VALUES ('VE998', 'HK06', 'CB05', '5B', GETDATE());
+
+CREATE TRIGGER TRG_CHECK_VECHUYENBAY
+ON VECHUYENBAY
+AFTER INSERT
+AS
+BEGIN
+    IF EXISTS
+    (
+        SELECT *
+        FROM CHUYENBAY, INSERTED
+        WHERE CHUYENBAY.MaCB = INSERTED.MaCB
+          AND CHUYENBAY.TrangThai <> N'Đang mở bán'
+    )
+    BEGIN
+        PRINT N'Chỉ được đặt vé cho chuyến bay có trạng thái "Đang mở bán". Hủy thao tác.';
+        ROLLBACK TRANSACTION;
+    END
+END;
+
+INSERT INTO GHE (MaGhe, MaMayBay, LoaiGhe)
+VALUES ('6B', 'MB06', N'Phổ thông');
+INSERT INTO VECHUYENBAY (MaVe, MaHK, MaCB, MaGhe, ThoiGianDat)
+VALUES ('VE997', 'HK01', 'CB06', '6B', GETDATE());
+
+/* =========================================================
+   5. PROCEDURE NGHIỆP VỤ
+========================================================= */
+
+CREATE PROCEDURE SP_TINHTONGTIEN
+AS
+BEGIN
+    UPDATE THANHTOAN
+    SET TongTien =
+    (
+        SELECT GIAVE.Gia +
+               ISNULL(
+                   (SELECT HANHLY.PhiThem
+                    FROM HANHLY
+                    WHERE HANHLY.MaVe = VECHUYENBAY.MaVe), 0
+               )
+        FROM VECHUYENBAY, GHE, GIAVE, CHUYENBAY
+        WHERE VECHUYENBAY.MaVe = THANHTOAN.MaVe
+          AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaGhe = GHE.MaGhe
+          AND GHE.MaMayBay = CHUYENBAY.MaMayBay
+          AND VECHUYENBAY.MaCB = GIAVE.MaCB
+          AND GHE.LoaiGhe = GIAVE.LoaiGhe
+    )
+    WHERE EXISTS
+    (
+        SELECT *
+        FROM VECHUYENBAY, GHE, GIAVE, CHUYENBAY
+        WHERE VECHUYENBAY.MaVe = THANHTOAN.MaVe
+          AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaGhe = GHE.MaGhe
+          AND GHE.MaMayBay = CHUYENBAY.MaMayBay
+          AND VECHUYENBAY.MaCB = GIAVE.MaCB
+          AND GHE.LoaiGhe = GIAVE.LoaiGhe
+    );
+END;
+
+EXEC SP_TINHTONGTIEN;
+SELECT * FROM THANHTOAN;
+
+CREATE PROCEDURE SP_TIMCHUYENBAY
+    @SanBayDi VARCHAR(10) = NULL,
+    @SanBayDen VARCHAR(10) = NULL,
+    @NgayDi DATE = NULL
+AS
+BEGIN
+    SELECT
+        CHUYENBAY.MaCB,
+        MAYBAY.HangHangKhong,
+        SANBAY.TenSanBay AS TenSanBayDi,
+        SANBAY2.TenSanBay AS TenSanBayDen,
+        CHUYENBAY.NgayGioDi,
+        CHUYENBAY.NgayGioDen,
+        CHUYENBAY.TrangThai,
+        MAYBAY.SoLuongGhe -
+        (
+            SELECT COUNT(*)
+            FROM VECHUYENBAY
+            WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+        ) AS SoGheConLai
+    FROM CHUYENBAY, MAYBAY, SANBAY, SANBAY AS SANBAY2
+    WHERE CHUYENBAY.MaMayBay = MAYBAY.MaMayBay
+      AND CHUYENBAY.SanBayDi = SANBAY.MaSanBay
+      AND CHUYENBAY.SanBayDen = SANBAY2.MaSanBay
+      AND (@SanBayDi IS NULL OR CHUYENBAY.SanBayDi = @SanBayDi)
+      AND (@SanBayDen IS NULL OR CHUYENBAY.SanBayDen = @SanBayDen)
+      AND (@NgayDi IS NULL OR CONVERT(DATE, CHUYENBAY.NgayGioDi) = @NgayDi)
+      AND CHUYENBAY.TrangThai = N'Đang mở bán'
+    ORDER BY CHUYENBAY.NgayGioDi;
+END;
+
+EXEC SP_TIMCHUYENBAY;
+EXEC SP_TIMCHUYENBAY @SanBayDi = 'SBH';
+EXEC SP_TIMCHUYENBAY @SanBayDi = 'SBH', @SanBayDen = 'SBN';
+EXEC SP_TIMCHUYENBAY @NgayDi = '2025-04-20';
+
+CREATE PROCEDURE SP_DATVEMOI
+    @MaVe VARCHAR(15),
+    @MaHK VARCHAR(10),
+    @MaCB VARCHAR(10),
+    @MaGhe VARCHAR(10),
+    @ThoiGianDat DATETIME,
+    @KhoiLuongHanhLy INT = NULL,
+    @PhuongThucThanhToan NVARCHAR(50)
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRAN;
+
+        DECLARE @MaMayBay VARCHAR(10);
+        DECLARE @MaHanhLy INT;
+        DECLARE @PhiThem DECIMAL(18,2);
+        DECLARE @MaThanhToan INT;
+        DECLARE @SoGhe INT;
+        DECLARE @SoGheDaDat INT;
+
+        IF NOT EXISTS (SELECT * FROM HANHKHACH WHERE MaHK = @MaHK)
+        BEGIN
+            PRINT N'Hành khách không tồn tại';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        IF NOT EXISTS (SELECT * FROM CHUYENBAY WHERE MaCB = @MaCB)
+        BEGIN
+            PRINT N'Chuyến bay không tồn tại';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        IF (SELECT TrangThai FROM CHUYENBAY WHERE MaCB = @MaCB) <> N'Đang mở bán'
+        BEGIN
+            PRINT N'Chuyến bay không thể đặt vé';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        SELECT @MaMayBay = MaMayBay
+        FROM CHUYENBAY
+        WHERE MaCB = @MaCB;
+
+        IF NOT EXISTS
+        (
+            SELECT *
+            FROM GHE
+            WHERE MaGhe = @MaGhe
+              AND MaMayBay = @MaMayBay
+        )
+        BEGIN
+            PRINT N'Ghế không tồn tại trên máy bay này';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        IF EXISTS
+        (
+            SELECT *
+            FROM VECHUYENBAY
+            WHERE MaCB = @MaCB
+              AND MaGhe = @MaGhe
+        )
+        BEGIN
+            PRINT N'Ghế đã được đặt';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        INSERT INTO VECHUYENBAY (MaVe, MaHK, MaCB, MaGhe, ThoiGianDat)
+        VALUES (@MaVe, @MaHK, @MaCB, @MaGhe, @ThoiGianDat);
+
+        IF @KhoiLuongHanhLy IS NOT NULL
+        BEGIN
+            IF @KhoiLuongHanhLy > 35
+            BEGIN
+                PRINT N'Hành lý vượt quá 35kg';
+                ROLLBACK TRAN;
+                RETURN;
+            END
+
+            SELECT @MaHanhLy = ISNULL(MAX(MaHanhLy), 0) + 1
+            FROM HANHLY;
+
+            SET @PhiThem =
+                CASE
+                    WHEN @KhoiLuongHanhLy BETWEEN 25 AND 29 THEN 100000
+                    WHEN @KhoiLuongHanhLy = 30 THEN 200000
+                    WHEN @KhoiLuongHanhLy BETWEEN 31 AND 34 THEN 300000
+                    WHEN @KhoiLuongHanhLy = 35 THEN 400000
+                    ELSE 0
+                END;
+
+            INSERT INTO HANHLY (MaHanhLy, MaVe, KhoiLuongKg, PhiThem)
+            VALUES (@MaHanhLy, @MaVe, @KhoiLuongHanhLy, @PhiThem);
+        END
+
+        SELECT @MaThanhToan = ISNULL(MAX(MaThanhToan), 0) + 1
+        FROM THANHTOAN;
+
+        INSERT INTO THANHTOAN (MaThanhToan, MaVe, PhuongThuc, TongTien)
+        VALUES (@MaThanhToan, @MaVe, @PhuongThucThanhToan, 0);
+
+        EXEC SP_TINHTONGTIEN;
+
+        SELECT @SoGhe = SoLuongGhe
+        FROM MAYBAY
+        WHERE MaMayBay = @MaMayBay;
+
+        SELECT @SoGheDaDat = COUNT(*)
+        FROM VECHUYENBAY
+        WHERE MaCB = @MaCB;
+
+        IF @SoGheDaDat >= @SoGhe
+        BEGIN
+            UPDATE CHUYENBAY
+            SET TrangThai = N'Hết vé'
+            WHERE MaCB = @MaCB;
+        END
+
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRAN;
+        PRINT N'Đặt vé thất bại';
+    END CATCH
+END;
+
+INSERT INTO GHE (MaGhe, MaMayBay, LoaiGhe)
+VALUES ('1E', 'MB01', N'Phổ thông');
+GO
+EXEC SP_DATVEMOI
+    @MaVe = 'VE018',
+    @MaHK = 'HK07',
+    @MaCB = 'CB02',
+    @MaGhe = '1E',
+	@ThoiGianDat = '2025-04-14',
+    @KhoiLuongHanhLy = 15,
+    @PhuongThucThanhToan = N'VietQR';
+GO
+SELECT * FROM VECHUYENBAY WHERE MaVe = 'VE018';
+SELECT * FROM HANHLY WHERE MaVe = 'VE018';
+SELECT * FROM THANHTOAN WHERE MaVe = 'VE018';
+
+
+CREATE PROCEDURE SP_HUYVE
+    @MaVe VARCHAR(15)
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRAN;
+
+        DECLARE @MaCB VARCHAR(10);
+        DECLARE @TrangThai NVARCHAR(50);
+        DECLARE @NgayGioDi DATETIME;
+        DECLARE @MaMayBay VARCHAR(10);
+        DECLARE @SoGhe INT;
+        DECLARE @SoGheDaDat INT;
+
+        IF NOT EXISTS (SELECT * FROM VECHUYENBAY WHERE MaVe = @MaVe)
+        BEGIN
+            PRINT N'Vé không tồn tại';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        SELECT @MaCB = VECHUYENBAY.MaCB,
+               @TrangThai = CHUYENBAY.TrangThai,
+               @NgayGioDi = CHUYENBAY.NgayGioDi
+        FROM VECHUYENBAY, CHUYENBAY
+        WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaVe = @MaVe;
+
+        IF @TrangThai IN (N'Đã cất cánh', N'Đã hạ cánh', N'Hủy') OR @NgayGioDi <= GETDATE()
+        BEGIN
+            PRINT N'Không thể hủy vé cho chuyến bay này';
+            ROLLBACK TRAN;
+            RETURN;
+        END
+
+        DELETE FROM THANHTOAN WHERE MaVe = @MaVe;
+        DELETE FROM HANHLY WHERE MaVe = @MaVe;
+        DELETE FROM VECHUYENBAY WHERE MaVe = @MaVe;
+
+        SELECT @MaMayBay = MaMayBay
+        FROM CHUYENBAY
+        WHERE MaCB = @MaCB;
+
+        SELECT @SoGhe = SoLuongGhe
+        FROM MAYBAY
+        WHERE MaMayBay = @MaMayBay;
+
+        SELECT @SoGheDaDat = COUNT(*)
+        FROM VECHUYENBAY
+        WHERE MaCB = @MaCB;
+
+        IF @SoGheDaDat < @SoGhe AND @TrangThai = N'Hết vé'
+        BEGIN
+            UPDATE CHUYENBAY
+            SET TrangThai = N'Đang mở bán'
+            WHERE MaCB = @MaCB;
+        END
+
+        COMMIT TRAN;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRAN;
+        PRINT N'Hủy vé thất bại';
+    END CATCH
+END;
+
+EXEC SP_HUYVE 'VE035';
+EXEC SP_HUYVE 'VE003';
+EXEC SP_HUYVE 'VE015';
+SELECT * FROM VECHUYENBAY WHERE MaVe = 'VE015';
+SELECT * FROM HANHLY WHERE MaVe = 'VE015';
+SELECT * FROM THANHTOAN WHERE MaVe = 'VE015';
+
+CREATE PROCEDURE SP_THONGKEDOANHTHUTHEOTHANG
+    @Nam INT,
+    @Thang INT = NULL
+AS
+BEGIN
+    IF @Thang IS NULL
+    BEGIN
+        SELECT
+            MONTH(CHUYENBAY.NgayGioDi) AS Thang,
+            SUM(THANHTOAN.TongTien) AS DoanhThu,
+            COUNT(DISTINCT VECHUYENBAY.MaCB) AS SoChuyenBay,
+            COUNT(VECHUYENBAY.MaVe) AS SoVe
+        FROM VECHUYENBAY, CHUYENBAY, THANHTOAN
+        WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaVe = THANHTOAN.MaVe
+          AND YEAR(CHUYENBAY.NgayGioDi) = @Nam
+        GROUP BY MONTH(CHUYENBAY.NgayGioDi)
+        ORDER BY Thang;
+    END
+    ELSE
+    BEGIN
+        SELECT
+            DAY(CHUYENBAY.NgayGioDi) AS Ngay,
+            SUM(THANHTOAN.TongTien) AS DoanhThu,
+            COUNT(DISTINCT VECHUYENBAY.MaCB) AS SoChuyenBay,
+            COUNT(VECHUYENBAY.MaVe) AS SoVe
+        FROM VECHUYENBAY, CHUYENBAY, THANHTOAN
+        WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          AND VECHUYENBAY.MaVe = THANHTOAN.MaVe
+          AND YEAR(CHUYENBAY.NgayGioDi) = @Nam
+          AND MONTH(CHUYENBAY.NgayGioDi) = @Thang
+        GROUP BY DAY(CHUYENBAY.NgayGioDi)
+        ORDER BY Ngay;
+    END
+END;
+
+EXEC SP_THONGKEDOANHTHUTHEOTHANG @Nam = 2025;
+EXEC SP_THONGKEDOANHTHUTHEOTHANG @Nam = 2025, @Thang = 4;
+
+CREATE PROCEDURE SP_CAPNHATTRANGTHAICHUYENBAY
+AS
+BEGIN
+    UPDATE CHUYENBAY
+    SET TrangThai = N'Đã cất cánh'
+    WHERE NgayGioDi <= GETDATE()
+      AND TrangThai IN (N'Đang mở bán', N'Hết vé');
+
+    UPDATE CHUYENBAY
+    SET TrangThai = N'Đã hạ cánh'
+    WHERE NgayGioDen <= GETDATE()
+      AND TrangThai = N'Đã cất cánh';
+
+    UPDATE CHUYENBAY
+    SET TrangThai = N'Hết vé'
+    WHERE MaCB IN
+    (
+        SELECT CHUYENBAY.MaCB
+        FROM CHUYENBAY, MAYBAY
+        WHERE CHUYENBAY.MaMayBay = MAYBAY.MaMayBay
+          AND CHUYENBAY.TrangThai = N'Đang mở bán'
+          AND
+          (
+              SELECT COUNT(*)
+              FROM VECHUYENBAY
+              WHERE VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+          ) >= MAYBAY.SoLuongGhe
+    );
+END;
+
+EXEC SP_CAPNHATTRANGTHAICHUYENBAY;
+SELECT MaCB, NgayGioDi, NgayGioDen, TrangThai
+FROM CHUYENBAY
+ORDER BY NgayGioDi;
+
+CREATE PROCEDURE ThongTinHanhKhach
+    @MaHK VARCHAR(10)
+AS
+BEGIN
+    DECLARE @HoTen NVARCHAR(100);
+    DECLARE @SoLuongVe INT;
+
+    SELECT @HoTen = HoTen
+    FROM HANHKHACH
+    WHERE MaHK = @MaHK;
+
+    IF @HoTen IS NULL
+    BEGIN
+        PRINT N'Hành khách không tồn tại.';
+        RETURN;
+    END
+
+    SELECT @SoLuongVe = COUNT(*)
+    FROM VECHUYENBAY
+    WHERE MaHK = @MaHK;
+
+    SELECT @MaHK AS MaHK, @HoTen AS HoTen, @SoLuongVe AS SoLuongVe;
+END;
+
+EXEC ThongTinHanhKhach 'HK01';
+EXEC ThongTinHanhKhach 'HK99';
+
+CREATE PROCEDURE SoGheTrongConLai
+    @MaCB VARCHAR(10)
+AS
+BEGIN
+    DECLARE @MaMayBay VARCHAR(10);
+    DECLARE @TongSoGhe INT;
+    DECLARE @SoGheDaDat INT;
+
+    IF NOT EXISTS (SELECT * FROM CHUYENBAY WHERE MaCB = @MaCB)
+    BEGIN
+        PRINT N'Chuyến bay không tồn tại.';
+        RETURN;
+    END
+
+    SELECT @MaMayBay = MaMayBay
+    FROM CHUYENBAY
+    WHERE MaCB = @MaCB;
+
+    SELECT @TongSoGhe = SoLuongGhe
+    FROM MAYBAY
+    WHERE MaMayBay = @MaMayBay;
+
+    SELECT @SoGheDaDat = COUNT(*)
+    FROM VECHUYENBAY
+    WHERE MaCB = @MaCB;
+
+    SELECT
+        @MaCB AS MaChuyenBay,
+        @TongSoGhe AS TongSoGhe,
+        @SoGheDaDat AS SoGheDaDat,
+        (@TongSoGhe - @SoGheDaDat) AS SoGheConLai;
+END;
+
+EXEC SoGheTrongConLai 'CB01';
+EXEC SoGheTrongConLai 'CB15';
+
+/* =========================================================
+   6. PROCEDURE UPDATE CẦN THIẾT
+========================================================= */
+
+CREATE PROCEDURE SP_SUAHANHKHACH
+    @MaHK VARCHAR(10),
+    @HoTen NVARCHAR(100),
+    @Email VARCHAR(100),
+    @SDT VARCHAR(15),
+    @CCCD VARCHAR(20),
+    @NgaySinh DATE
+AS
+BEGIN
+    IF NOT EXISTS (SELECT * FROM HANHKHACH WHERE MaHK = @MaHK)
+    BEGIN
+        PRINT N'Hành khách không tồn tại';
+        RETURN;
+    END
+
+    UPDATE HANHKHACH
+    SET HoTen = @HoTen,
+        Email = @Email,
+        SDT = @SDT,
+        CCCD = @CCCD,
+        NgaySinh = @NgaySinh
+    WHERE MaHK = @MaHK;
+END;
+
+EXEC SP_SUAHANHKHACH
+    @MaHK = 'HK01',
+    @HoTen = N'Nguyễn Văn An Updated',
+    @Email = 'annguyen_updated@gmail.com',
+    @SDT = '0911111111',
+    @CCCD = '001234567800',
+    @NgaySinh = '1995-05-21';
+
+SELECT * FROM HANHKHACH WHERE MaHK = 'HK01';
+
+CREATE PROCEDURE SP_CAPNHAT_GIAVE
+    @MaCB VARCHAR(10),
+    @LoaiGhe NVARCHAR(50),
+    @GiaMoi DECIMAL(18,2)
+AS
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT *
+        FROM GIAVE
+        WHERE MaCB = @MaCB
+          AND LoaiGhe = @LoaiGhe
+    )
+    BEGIN
+        PRINT N'Không tìm thấy giá vé cần cập nhật';
+        RETURN;
+    END
+
+    IF @GiaMoi < 0
+    BEGIN
+        PRINT N'Giá vé không hợp lệ';
+        RETURN;
+    END
+
+    UPDATE GIAVE
+    SET Gia = @GiaMoi
+    WHERE MaCB = @MaCB
+      AND LoaiGhe = @LoaiGhe;
+END;
+
+EXEC SP_CAPNHAT_GIAVE
+    @MaCB = 'CB01',
+    @LoaiGhe = N'Phổ thông',
+    @GiaMoi = 1600000;
+
+SELECT * FROM GIAVE WHERE MaCB = 'CB01';
+
+CREATE PROCEDURE SP_CAPNHAT_TRANGTHAI_MOTCHUYENBAY
+    @MaCB VARCHAR(10),
+    @TrangThaiMoi NVARCHAR(50)
+AS
+BEGIN
+    IF NOT EXISTS (SELECT * FROM CHUYENBAY WHERE MaCB = @MaCB)
+    BEGIN
+        PRINT N'Chuyến bay không tồn tại';
+        RETURN;
+    END
+
+    IF @TrangThaiMoi NOT IN (N'Đang mở bán', N'Đã cất cánh', N'Đã hạ cánh', N'Hết vé', N'Hủy')
+    BEGIN
+        PRINT N'Trạng thái không hợp lệ';
+        RETURN;
+    END
+
+    UPDATE CHUYENBAY
+    SET TrangThai = @TrangThaiMoi
+    WHERE MaCB = @MaCB;
+END;
+
+EXEC SP_CAPNHAT_TRANGTHAI_MOTCHUYENBAY
+    @MaCB = 'CB01',
+    @TrangThaiMoi = N'Hết vé';
+
+SELECT * FROM CHUYENBAY WHERE MaCB = 'CB01';
+
+/* =========================================================
+   7. NHÓM PROCEDURE SEARCH
+========================================================= */
+
+CREATE PROCEDURE SP_SEARCH_HANHKHACH
+    @MaHK VARCHAR(10) = NULL,
+    @HoTen NVARCHAR(100) = NULL,
+    @CCCD VARCHAR(20) = NULL,
+    @SDT VARCHAR(15) = NULL,
+    @Email VARCHAR(100) = NULL
+AS
+BEGIN
+    SELECT
+        HANHKHACH.MaHK,
+        HANHKHACH.HoTen,
+        HANHKHACH.Email,
+        HANHKHACH.SDT,
+        HANHKHACH.CCCD,
+        HANHKHACH.NgaySinh
+    FROM HANHKHACH
+    WHERE (@MaHK IS NULL OR HANHKHACH.MaHK = @MaHK)
+      AND (@HoTen IS NULL OR HANHKHACH.HoTen LIKE N'%' + @HoTen + N'%')
+      AND (@CCCD IS NULL OR HANHKHACH.CCCD = @CCCD)
+      AND (@SDT IS NULL OR HANHKHACH.SDT = @SDT)
+      AND (@Email IS NULL OR HANHKHACH.Email = @Email)
+    ORDER BY HANHKHACH.MaHK;
+END;
+
+EXEC SP_SEARCH_HANHKHACH;
+EXEC SP_SEARCH_HANHKHACH @HoTen = N'Nguyễn';
+EXEC SP_SEARCH_HANHKHACH @MaHK = 'HK01';
+EXEC SP_SEARCH_HANHKHACH @CCCD = '001234567800';
+
+CREATE PROCEDURE SP_SEARCH_CHUYENBAY
+    @MaCB VARCHAR(10) = NULL,
+    @SanBayDi VARCHAR(10) = NULL,
+    @SanBayDen VARCHAR(10) = NULL,
+    @NgayDi DATE = NULL,
+    @TrangThai NVARCHAR(50) = NULL,
+    @MaMayBay VARCHAR(10) = NULL
+AS
+BEGIN
+    SELECT
+        CHUYENBAY.MaCB,
+        CHUYENBAY.MaMayBay,
+        MAYBAY.HangHangKhong,
+        CHUYENBAY.SanBayDi,
+        CHUYENBAY.SanBayDen,
+        CHUYENBAY.NgayGioDi,
+        CHUYENBAY.NgayGioDen,
+        CHUYENBAY.TrangThai
+    FROM CHUYENBAY, MAYBAY
+    WHERE CHUYENBAY.MaMayBay = MAYBAY.MaMayBay
+      AND (@MaCB IS NULL OR CHUYENBAY.MaCB = @MaCB)
+      AND (@SanBayDi IS NULL OR CHUYENBAY.SanBayDi = @SanBayDi)
+      AND (@SanBayDen IS NULL OR CHUYENBAY.SanBayDen = @SanBayDen)
+      AND (@NgayDi IS NULL OR CONVERT(DATE, CHUYENBAY.NgayGioDi) = @NgayDi)
+      AND (@TrangThai IS NULL OR CHUYENBAY.TrangThai = @TrangThai)
+      AND (@MaMayBay IS NULL OR CHUYENBAY.MaMayBay = @MaMayBay)
+    ORDER BY CHUYENBAY.NgayGioDi;
+END;
+
+EXEC SP_SEARCH_CHUYENBAY;
+EXEC SP_SEARCH_CHUYENBAY @TrangThai = N'Đang mở bán';
+EXEC SP_SEARCH_CHUYENBAY @SanBayDi = 'SBH', @SanBayDen = 'SBN';
+EXEC SP_SEARCH_CHUYENBAY @NgayDi = '2025-04-20';
+EXEC SP_SEARCH_CHUYENBAY @MaCB = 'CB01';
+
+CREATE PROCEDURE SP_SEARCH_VE
+    @MaVe VARCHAR(15) = NULL,
+    @MaHK VARCHAR(10) = NULL,
+    @MaCB VARCHAR(10) = NULL,
+    @MaGhe VARCHAR(10) = NULL,
+    @NgayDat DATE = NULL
+AS
+BEGIN
+    SELECT
+        VECHUYENBAY.MaVe,
+        VECHUYENBAY.MaHK,
+        HANHKHACH.HoTen,
+        VECHUYENBAY.MaCB,
+        VECHUYENBAY.MaGhe,
+        VECHUYENBAY.ThoiGianDat
+    FROM VECHUYENBAY, HANHKHACH
+    WHERE VECHUYENBAY.MaHK = HANHKHACH.MaHK
+      AND (@MaVe IS NULL OR VECHUYENBAY.MaVe = @MaVe)
+      AND (@MaHK IS NULL OR VECHUYENBAY.MaHK = @MaHK)
+      AND (@MaCB IS NULL OR VECHUYENBAY.MaCB = @MaCB)
+      AND (@MaGhe IS NULL OR VECHUYENBAY.MaGhe = @MaGhe)
+      AND (@NgayDat IS NULL OR CONVERT(DATE, VECHUYENBAY.ThoiGianDat) = @NgayDat)
+    ORDER BY VECHUYENBAY.ThoiGianDat;
+END;
+
+EXEC SP_SEARCH_VE;
+EXEC SP_SEARCH_VE @MaVe = 'VE001';
+EXEC SP_SEARCH_VE @MaHK = 'HK01';
+EXEC SP_SEARCH_VE @MaCB = 'CB01';
+EXEC SP_SEARCH_VE @NgayDat = '2025-04-14';
+
+CREATE PROCEDURE SP_SEARCH_HANHLY
+    @MaHanhLy INT = NULL,
+    @MaVe VARCHAR(15) = NULL,
+    @MaHK VARCHAR(10) = NULL,
+    @TuKg INT = NULL,
+    @DenKg INT = NULL,
+    @TuPhi DECIMAL(18,2) = NULL,
+    @DenPhi DECIMAL(18,2) = NULL
+AS
+BEGIN
+    SELECT
+        HANHLY.MaHanhLy,
+        HANHLY.MaVe,
+        HANHKHACH.MaHK,
+        HANHKHACH.HoTen,
+        HANHLY.KhoiLuongKg,
+        HANHLY.PhiThem
+    FROM HANHLY, VECHUYENBAY, HANHKHACH
+    WHERE HANHLY.MaVe = VECHUYENBAY.MaVe
+      AND VECHUYENBAY.MaHK = HANHKHACH.MaHK
+      AND (@MaHanhLy IS NULL OR HANHLY.MaHanhLy = @MaHanhLy)
+      AND (@MaVe IS NULL OR HANHLY.MaVe = @MaVe)
+      AND (@MaHK IS NULL OR HANHKHACH.MaHK = @MaHK)
+      AND (@TuKg IS NULL OR HANHLY.KhoiLuongKg >= @TuKg)
+      AND (@DenKg IS NULL OR HANHLY.KhoiLuongKg <= @DenKg)
+      AND (@TuPhi IS NULL OR HANHLY.PhiThem >= @TuPhi)
+      AND (@DenPhi IS NULL OR HANHLY.PhiThem <= @DenPhi)
+    ORDER BY HANHLY.MaHanhLy;
+END;
+
+EXEC SP_SEARCH_HANHLY;
+EXEC SP_SEARCH_HANHLY @MaVe = 'VE001';
+EXEC SP_SEARCH_HANHLY @MaHK = 'HK01';
+EXEC SP_SEARCH_HANHLY @TuKg = 25, @DenKg = 35;
+EXEC SP_SEARCH_HANHLY @TuPhi = 100000, @DenPhi = 400000;
+
+CREATE PROCEDURE SP_SEARCH_THANHTOAN
+    @MaThanhToan INT = NULL,
+    @MaVe VARCHAR(15) = NULL,
+    @PhuongThuc NVARCHAR(50) = NULL,
+    @TuTien DECIMAL(18,2) = NULL,
+    @DenTien DECIMAL(18,2) = NULL
+AS
+BEGIN
+    SELECT
+        THANHTOAN.MaThanhToan,
+        THANHTOAN.MaVe,
+        HANHKHACH.HoTen,
+        THANHTOAN.PhuongThuc,
+        THANHTOAN.TongTien
+    FROM THANHTOAN, VECHUYENBAY, HANHKHACH
+    WHERE THANHTOAN.MaVe = VECHUYENBAY.MaVe
+      AND VECHUYENBAY.MaHK = HANHKHACH.MaHK
+      AND (@MaThanhToan IS NULL OR THANHTOAN.MaThanhToan = @MaThanhToan)
+      AND (@MaVe IS NULL OR THANHTOAN.MaVe = @MaVe)
+      AND (@PhuongThuc IS NULL OR THANHTOAN.PhuongThuc = @PhuongThuc)
+      AND (@TuTien IS NULL OR THANHTOAN.TongTien >= @TuTien)
+      AND (@DenTien IS NULL OR THANHTOAN.TongTien <= @DenTien)
+    ORDER BY THANHTOAN.MaThanhToan;
+END;
+
+EXEC SP_SEARCH_THANHTOAN;
+EXEC SP_SEARCH_THANHTOAN @MaVe = 'VE001';
+EXEC SP_SEARCH_THANHTOAN @PhuongThuc = N'VietQR';
+EXEC SP_SEARCH_THANHTOAN @TuTien = 1500000, @DenTien = 3000000;
+
+CREATE PROCEDURE SP_SEARCH_THONGTINVE
+    @MaVe VARCHAR(15) = NULL,
+    @MaHK VARCHAR(10) = NULL,
+    @MaCB VARCHAR(10) = NULL,
+    @TrangThai NVARCHAR(50) = NULL,
+    @PhuongThuc NVARCHAR(50) = NULL
+AS
+BEGIN
+    SELECT
+        VECHUYENBAY.MaVe,
+        HANHKHACH.MaHK,
+        HANHKHACH.HoTen,
+        CHUYENBAY.MaCB,
+        CHUYENBAY.SanBayDi,
+        CHUYENBAY.SanBayDen,
+        CHUYENBAY.NgayGioDi,
+        VECHUYENBAY.MaGhe,
+        THANHTOAN.PhuongThuc,
+        THANHTOAN.TongTien,
+        CHUYENBAY.TrangThai
+    FROM VECHUYENBAY, HANHKHACH, CHUYENBAY, THANHTOAN
+    WHERE VECHUYENBAY.MaHK = HANHKHACH.MaHK
+      AND VECHUYENBAY.MaCB = CHUYENBAY.MaCB
+      AND VECHUYENBAY.MaVe = THANHTOAN.MaVe
+      AND (@MaVe IS NULL OR VECHUYENBAY.MaVe = @MaVe)
+      AND (@MaHK IS NULL OR HANHKHACH.MaHK = @MaHK)
+      AND (@MaCB IS NULL OR CHUYENBAY.MaCB = @MaCB)
+      AND (@TrangThai IS NULL OR CHUYENBAY.TrangThai = @TrangThai)
+      AND (@PhuongThuc IS NULL OR THANHTOAN.PhuongThuc = @PhuongThuc)
+    ORDER BY VECHUYENBAY.MaVe;
+END;
+
+EXEC SP_SEARCH_THONGTINVE;
+
+CREATE PROCEDURE SP_SEARCH_GHE
+    @MaMayBay VARCHAR(10) = NULL,
+    @MaGhe VARCHAR(10) = NULL,
+    @LoaiGhe NVARCHAR(50) = NULL
+AS
+BEGIN
+    SELECT
+        GHE.MaGhe,
+        GHE.MaMayBay,
+        GHE.LoaiGhe
+    FROM GHE
+    WHERE (@MaMayBay IS NULL OR GHE.MaMayBay = @MaMayBay)
+      AND (@MaGhe IS NULL OR GHE.MaGhe = @MaGhe)
+      AND (@LoaiGhe IS NULL OR GHE.LoaiGhe = @LoaiGhe)
+    ORDER BY GHE.MaMayBay, GHE.MaGhe;
+END;
+
+EXEC SP_SEARCH_GHE;
+EXEC SP_SEARCH_GHE @MaMayBay = 'MB01';
+EXEC SP_SEARCH_GHE @LoaiGhe = N'Phổ thông';
+EXEC SP_SEARCH_GHE @MaGhe = '1A';

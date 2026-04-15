@@ -100,12 +100,6 @@
     <Compile Include="FrmDangNhap.Designer.cs">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmDatVe.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmDatVe.Designer.cs">
-      <DependentUpon>FrmDatVe.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmDoiMK.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,13 +172,20 @@
     <Compile Include="FrmVeChuyenBay.Designer.cs">
       <DependentUpon>FrmVeChuyenBay.cs</DependentUpon>
     </Compile>
+    <Compile Include="KETNOI_CSDL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmBanVe.resx">
+      <DependentUpon>FrmBanVe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSanBay.resx">
+      <DependentUpon>FrmSanBay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
