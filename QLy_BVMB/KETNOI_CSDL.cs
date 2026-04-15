@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace ThuHang
+namespace QLy_BVMB
 {
     internal class KETNOI_CSDL
     {

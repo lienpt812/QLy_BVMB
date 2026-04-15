@@ -90,7 +90,7 @@
             // 
             this.lblTENSANBAY.AutoSize = true;
             this.lblTENSANBAY.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTENSANBAY.Location = new System.Drawing.Point(166, 183);
+            this.lblTENSANBAY.Location = new System.Drawing.Point(166, 185);
             this.lblTENSANBAY.Name = "lblTENSANBAY";
             this.lblTENSANBAY.Size = new System.Drawing.Size(147, 22);
             this.lblTENSANBAY.TabIndex = 32;
@@ -98,21 +98,21 @@
             // 
             // txtTHANHPHO
             // 
-            this.txtTHANHPHO.Location = new System.Drawing.Point(347, 230);
+            this.txtTHANHPHO.Location = new System.Drawing.Point(370, 230);
             this.txtTHANHPHO.Name = "txtTHANHPHO";
             this.txtTHANHPHO.Size = new System.Drawing.Size(209, 22);
             this.txtTHANHPHO.TabIndex = 27;
             // 
             // txtTENSANBAY
             // 
-            this.txtTENSANBAY.Location = new System.Drawing.Point(347, 185);
+            this.txtTENSANBAY.Location = new System.Drawing.Point(370, 185);
             this.txtTENSANBAY.Name = "txtTENSANBAY";
             this.txtTENSANBAY.Size = new System.Drawing.Size(209, 22);
             this.txtTENSANBAY.TabIndex = 28;
             // 
             // txtMASANBAY
             // 
-            this.txtMASANBAY.Location = new System.Drawing.Point(347, 136);
+            this.txtMASANBAY.Location = new System.Drawing.Point(370, 136);
             this.txtMASANBAY.Name = "txtMASANBAY";
             this.txtMASANBAY.Size = new System.Drawing.Size(209, 22);
             this.txtMASANBAY.TabIndex = 29;
@@ -184,7 +184,7 @@
             // 
             // txtQUOCGIA
             // 
-            this.txtQUOCGIA.Location = new System.Drawing.Point(347, 273);
+            this.txtQUOCGIA.Location = new System.Drawing.Point(370, 273);
             this.txtQUOCGIA.Name = "txtQUOCGIA";
             this.txtQUOCGIA.Size = new System.Drawing.Size(209, 22);
             this.txtQUOCGIA.TabIndex = 35;

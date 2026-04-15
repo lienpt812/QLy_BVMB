@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ThuHang;
+using QLy_BVMB;
 
 namespace QLy_BVMB
 {
