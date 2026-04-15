@@ -72,9 +72,9 @@
             this.lblTHANHPHO.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTHANHPHO.Location = new System.Drawing.Point(166, 228);
             this.lblTHANHPHO.Name = "lblTHANHPHO";
-            this.lblTHANHPHO.Size = new System.Drawing.Size(77, 22);
+            this.lblTHANHPHO.Size = new System.Drawing.Size(132, 22);
             this.lblTHANHPHO.TabIndex = 30;
-            this.lblTHANHPHO.Text = "SỐ TC:";
+            this.lblTHANHPHO.Text = "THÀNH PHỐ:";
             // 
             // lblMASANBAY
             // 
@@ -210,7 +210,7 @@
             this.Controls.Add(this.btnLUU);
             this.Controls.Add(this.btnTAOMOI);
             this.Name = "FrmSanBay";
-            this.Text = "FrmSanBay";
+            this.Text = "S";
             this.Load += new System.EventHandler(this.FrmSanBay_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Data_SANBAY)).EndInit();
             this.ResumeLayout(false);
