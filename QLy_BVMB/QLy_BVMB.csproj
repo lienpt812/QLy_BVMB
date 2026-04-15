@@ -184,6 +184,9 @@
     <EmbeddedResource Include="FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmGhe.resx">
+      <DependentUpon>FrmGhe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmGiaVe.resx">
       <DependentUpon>FrmGiaVe.cs</DependentUpon>
     </EmbeddedResource>
