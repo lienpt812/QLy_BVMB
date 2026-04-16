@@ -16,5 +16,43 @@ namespace QLy_BVMB
         {
             InitializeComponent();
         }
+
+        private void btnDoiMatKhau_Click(object sender, EventArgs e)
+        {
+            if (txtMatKhauCu.Text == "")
+            {
+                MessageBox.Show("Chưa nhập mật khẩu cũ");
+                txtMatKhauCu.Focus();
+                return;
+            }
+
+            if (txtMatKhauMoi.Text == "")
+            {
+                MessageBox.Show("Chưa nhập mật khẩu mới");
+                txtMatKhauMoi.Focus();
+                return;
+            }
+
+            if (txtNhapLai.Text == "")
+            {
+                MessageBox.Show("Chưa nhập lại mật khẩu mới");
+                txtNhapLai.Focus();
+                return;
+            }
+
+            if (txtMatKhauMoi.Text != txtNhapLai.Text)
+            {
+                MessageBox.Show("Nhập lại mật khẩu mới không đúng");
+                txtNhapLai.Focus();
+                return;
+            }
+
+            MessageBox.Show("Đổi mật khẩu thành công");
+        }
+
+        private void btnTHOAT_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

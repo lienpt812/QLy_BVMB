@@ -12,7 +12,7 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grpNhapLieu = new System.Windows.Forms.GroupBox();
             this.lblGiaVe = new System.Windows.Forms.Label();
             this.cboPhuongThuc = new System.Windows.Forms.ComboBox();
@@ -68,7 +68,7 @@
             this.lblGiaVe.ForeColor = System.Drawing.Color.DarkBlue;
             this.lblGiaVe.Location = new System.Drawing.Point(150, 123);
             this.lblGiaVe.Name = "lblGiaVe";
-            this.lblGiaVe.Size = new System.Drawing.Size(56, 20);
+            this.lblGiaVe.Size = new System.Drawing.Size(69, 25);
             this.lblGiaVe.TabIndex = 0;
             this.lblGiaVe.Text = "Giá: ---";
             // 
@@ -85,7 +85,7 @@
             "Ví điện tử"});
             this.cboPhuongThuc.Location = new System.Drawing.Point(150, 172);
             this.cboPhuongThuc.Name = "cboPhuongThuc";
-            this.cboPhuongThuc.Size = new System.Drawing.Size(300, 28);
+            this.cboPhuongThuc.Size = new System.Drawing.Size(300, 33);
             this.cboPhuongThuc.TabIndex = 1;
             // 
             // label5
@@ -94,7 +94,7 @@
             this.label5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label5.Location = new System.Drawing.Point(20, 175);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(88, 20);
+            this.label5.Size = new System.Drawing.Size(106, 25);
             this.label5.TabIndex = 2;
             this.label5.Text = "Thanh Toán:";
             // 
@@ -104,7 +104,7 @@
             this.cboGhe.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cboGhe.Location = new System.Drawing.Point(150, 137);
             this.cboGhe.Name = "cboGhe";
-            this.cboGhe.Size = new System.Drawing.Size(300, 28);
+            this.cboGhe.Size = new System.Drawing.Size(300, 33);
             this.cboGhe.TabIndex = 3;
             // 
             // label4
@@ -113,7 +113,7 @@
             this.label4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label4.Location = new System.Drawing.Point(20, 140);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 20);
+            this.label4.Size = new System.Drawing.Size(47, 25);
             this.label4.TabIndex = 4;
             this.label4.Text = "Ghế:";
             // 
@@ -123,7 +123,7 @@
             this.cboChuyenBay.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cboChuyenBay.Location = new System.Drawing.Point(150, 97);
             this.cboChuyenBay.Name = "cboChuyenBay";
-            this.cboChuyenBay.Size = new System.Drawing.Size(300, 28);
+            this.cboChuyenBay.Size = new System.Drawing.Size(300, 33);
             this.cboChuyenBay.TabIndex = 5;
             this.cboChuyenBay.SelectedIndexChanged += new System.EventHandler(this.cboChuyenBay_SelectedIndexChanged);
             // 
@@ -133,7 +133,7 @@
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label3.Location = new System.Drawing.Point(20, 100);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 20);
+            this.label3.Size = new System.Drawing.Size(108, 25);
             this.label3.TabIndex = 6;
             this.label3.Text = "Chuyến Bay:";
             // 
@@ -143,7 +143,7 @@
             this.cboHanhKhach.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cboHanhKhach.Location = new System.Drawing.Point(150, 62);
             this.cboHanhKhach.Name = "cboHanhKhach";
-            this.cboHanhKhach.Size = new System.Drawing.Size(300, 28);
+            this.cboHanhKhach.Size = new System.Drawing.Size(300, 33);
             this.cboHanhKhach.TabIndex = 7;
             // 
             // label2
@@ -152,7 +152,7 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label2.Location = new System.Drawing.Point(20, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(91, 20);
+            this.label2.Size = new System.Drawing.Size(110, 25);
             this.label2.TabIndex = 8;
             this.label2.Text = "Hành Khách:";
             // 
@@ -163,7 +163,7 @@
             this.txtMaVe.Location = new System.Drawing.Point(150, 27);
             this.txtMaVe.Name = "txtMaVe";
             this.txtMaVe.ReadOnly = true;
-            this.txtMaVe.Size = new System.Drawing.Size(300, 27);
+            this.txtMaVe.Size = new System.Drawing.Size(300, 31);
             this.txtMaVe.TabIndex = 9;
             // 
             // label1
@@ -172,7 +172,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label1.Location = new System.Drawing.Point(20, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 20);
+            this.label1.Size = new System.Drawing.Size(65, 25);
             this.label1.TabIndex = 10;
             this.label1.Text = "Mã Vé:";
             // 
@@ -186,6 +186,7 @@
             this.grpDanhSach.TabIndex = 1;
             this.grpDanhSach.TabStop = false;
             this.grpDanhSach.Text = "📋 Danh sách vé đã bán";
+            this.grpDanhSach.Enter += new System.EventHandler(this.grpDanhSach_Enter);
             // 
             // dgvDanhSachVe
             // 
@@ -193,14 +194,14 @@
             this.dgvDanhSachVe.AllowUserToDeleteRows = false;
             this.dgvDanhSachVe.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvDanhSachVe.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.SteelBlue;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvDanhSachVe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.SteelBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDanhSachVe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvDanhSachVe.ColumnHeadersHeight = 29;
             this.dgvDanhSachVe.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgvDanhSachVe.Location = new System.Drawing.Point(10, 25);
@@ -259,7 +260,7 @@
             this.txtTimKiem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtTimKiem.Location = new System.Drawing.Point(100, 32);
             this.txtTimKiem.Name = "txtTimKiem";
-            this.txtTimKiem.Size = new System.Drawing.Size(230, 27);
+            this.txtTimKiem.Size = new System.Drawing.Size(230, 31);
             this.txtTimKiem.TabIndex = 2;
             // 
             // label6
@@ -268,7 +269,7 @@
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label6.Location = new System.Drawing.Point(15, 35);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(73, 20);
+            this.label6.Size = new System.Drawing.Size(88, 25);
             this.label6.TabIndex = 3;
             this.label6.Text = "Tìm kiếm:";
             // 
@@ -300,7 +301,7 @@
             // 
             // FrmBanVe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(980, 570);

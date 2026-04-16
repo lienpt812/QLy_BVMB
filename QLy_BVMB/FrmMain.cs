@@ -106,12 +106,97 @@ namespace QLy_BVMB
 
         private void chuyếnBayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Form frm = new FrmChuyenBay();
+            frm.ShowDialog();
         }
 
         private void giáVéToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Form frm = new FrmGiaVe();
+            frm.ShowDialog();
+        }
 
+        private void quảnLýDanhMụcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sânBayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmSanBay();
+            frm.ShowDialog();
+        }
+
+        private void máyBayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmMayBay();
+            frm.ShowDialog();
+        }
+
+        private void ghếToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmGhe();
+            frm.ShowDialog();
+        }
+
+        private void hànhLýToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmHanhLy();
+            frm.ShowDialog();
+        }
+
+        private void hànhKháchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmHanhKhach();
+            frm.ShowDialog();
+        }
+
+        private void bánVéToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmBanVe();
+            frm.ShowDialog();
+        }
+
+        private void huỷVéToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmHuyVe();
+            frm.ShowDialog();
+        }
+
+        private void thanhToánToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form frm = new FrmThanhToan();
+            frm.ShowDialog();
+        }
+
+        private void véChuyếnBayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new FrmVeChuyenBay();
+            form.ShowDialog();
+        }
+
+        private void doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new FrmBCDoanhThuVe();
+            form.ShowDialog();
+        }
+
+        private void ghếTrốngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new FrmBaoCaoGheTrong();
+            form.ShowDialog();
+        }
+
+        private void kháchVIPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new FrmBaoCaoKhachVip();
+            form.ShowDialog();
+        }
+
+        private void véBánToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new FrmBCVeBanNgay();
+            form.ShowDialog();
         }
     }
 }

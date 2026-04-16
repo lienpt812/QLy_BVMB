@@ -16,95 +16,77 @@ namespace QLy_BVMB
         {
             InitializeComponent();
         }
-
-        private void txtGIAVE_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        KETNOI_CSDL knn = new KETNOI_CSDL();
-        private void BANGHANHLY()
-        {
-            DataTable dta = new DataTable();
-            dta = knn.LayBang("SELECT * FROM HANHLY");
-            Data_HANHLY.DataSource = dta;
-        }
-        private void BANGVE()
-        {
-            DataTable dta = new DataTable();
-            dta = knn.LayBang("SELECT * FROM VECHUYENBAY");
-            cboMAVE.DataSource = dta;
-            cboMAVE.ValueMember = "MAVE";
-        }
-        private void HIENTHIDULIEU()
-        {
-            txtMAHANHLY.DataBindings.Clear();
-            txtMAHANHLY.DataBindings.Add("Text", Data_HANHLY.DataSource, "MAHANHLY");
-
-            cboMAVE.DataBindings.Clear();
-            cboMAVE.DataBindings.Add("Text", Data_HANHLY.DataSource, "MAVE");
-
-            txtKHOILUONG.DataBindings.Clear();
-            txtKHOILUONG.DataBindings.Add("Text", Data_HANHLY.DataSource, "KHOILUONGKG");
-
-            txtPHITHEM.DataBindings.Clear();
-            txtPHITHEM.DataBindings.Add("Text", Data_HANHLY.DataSource, "PHITHEM");
-        }
+        KETNOI_CSDL kn = new KETNOI_CSDL();
         private void FrmHanhLy_Load(object sender, EventArgs e)
         {
-            BANGHANHLY();
-            BANGVE();
-            HIENTHIDULIEU();
+           LoadHanhLy();
         }
-
-        private void btnTAOMOI_Click(object sender, EventArgs e)
+        void LoadHanhLy()
         {
-            txtMAHANHLY.Text = "";
-            cboMAVE.Text = "";
-            txtPHITHEM.Text = "";
-            txtKHOILUONG.Text = "";
-            txtMAHANHLY.Focus();
-        }
+            dgvHanhLy.DataSource = kn.LayBang("SELECT * FROM HANHLY");
+            cboMaVe.DataSource = kn.LayBang("select MaVe from VECHUYENBAY");
+            cboMaVe.DisplayMember = "MaVe";
+            cboMaVe.ValueMember = "MaVe";
 
-        private void btnLUU_Click(object sender, EventArgs e)
-        {
-            String sql_luu = "INSERT INTO HANHLY VALUES("
-                + txtMAHANHLY.Text + ","
-                + "'" + cboMAVE.Text + "',"
-                + txtKHOILUONG.Text + ",0)";
-
-            knn.ThucThi(sql_luu);
-            BANGHANHLY();
-            HIENTHIDULIEU();
-            
-            
-        }
-
-        private void btnSUA_Click(object sender, EventArgs e)
-        {
-            String sql_sua = "UPDATE HANHLY SET "
-                + "MAVE='" + cboMAVE.Text + "',"
-                + "KHOILUONGKG=" + txtKHOILUONG.Text + ","
-                + "PHITHEM=0 "
-                + "WHERE MAHANHLY=" + txtMAHANHLY.Text;
-
-            knn.ThucThi(sql_sua);
-            BANGHANHLY();
-            HIENTHIDULIEU();
-            
-        }
-
-        private void btnXOA_Click(object sender, EventArgs e)
-        {
-            String sql_xoa = "DELETE FROM HANHLY WHERE MAHANHLY=" + txtMAHANHLY.Text;
-            knn.ThucThi(sql_xoa);
-            BANGHANHLY();
-            HIENTHIDULIEU();
-            
+            txtPhiThem.ReadOnly = true;
         }
 
         private void btnTHOAT_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close();
+        }
+
+        private void btnThemHL_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "insert into HANHLY values(" +
+                  txtMaHanhLy.Text + "," +
+                  "'" + cboMaVe.Text + "'," +
+                  numKhoiLuong.Value + "," +
+                  "0)";
+
+            kn.ThucThi(sql);
+            dgvHanhLy.DataSource = kn.LayBang("select * from HANHLY");
+            MessageBox.Show("Thêm hành lý thành công");
+        }
+
+        private void btnSuaHL_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "update HANHLY set " +
+                  "MaVe = '" + cboMaVe.Text + "', " +
+                  "KhoiLuongKg = " + numKhoiLuong.Value + " " +
+                  "where MaHanhLy = " + txtMaHanhLy.Text;
+
+            kn.ThucThi(sql);
+            dgvHanhLy.DataSource = kn.LayBang("select * from HANHLY");
+            MessageBox.Show("Sửa hành lý thành công");
+        }
+
+        private void btnXoaHL_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "delete from HANHLY where MaHanhLy = " + txtMaHanhLy.Text;
+
+            kn.ThucThi(sql);
+            dgvHanhLy.DataSource = kn.LayBang("select * from HANHLY");
+            MessageBox.Show("Xoá hành lý thành công");
+        }
+
+        private void numKhoiLuong_ValueChanged(object sender, EventArgs e)
+        {
+            int kg = (int)numKhoiLuong.Value;
+
+            if (kg >= 25 && kg <= 29)
+                txtPhiThem.Text = "100000";
+            else if (kg == 30)
+                txtPhiThem.Text = "200000";
+            else if (kg >= 31 && kg <= 34)
+                txtPhiThem.Text = "300000";
+            else if (kg == 35)
+                txtPhiThem.Text = "400000";
+            else
+                txtPhiThem.Text = "0";
         }
     }
 }

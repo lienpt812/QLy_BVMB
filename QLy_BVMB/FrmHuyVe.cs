@@ -16,5 +16,29 @@ namespace QLy_BVMB
         {
             InitializeComponent();
         }
+        KETNOI_CSDL kn = new KETNOI_CSDL();
+        void LoadVe()
+        {
+            dgvHuyVe.DataSource = kn.LayBang("SELECT * FROM VECHUYENBAY");
+        }
+        private void FrmHuyVe_Load(object sender, EventArgs e)
+        {
+            LoadVe();
+        }
+
+        private void btnHuyVe_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "exec SP_HUYVE '" + txtMaVe.Text + "'";
+
+            kn.ThucThi(sql);
+            dgvHuyVe.DataSource = kn.LayBang("select * from VECHUYENBAY");
+            MessageBox.Show("Huỷ vé thành công");
+        }
+
+        private void btnTHOAT_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

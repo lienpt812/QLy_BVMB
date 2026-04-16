@@ -82,7 +82,7 @@ namespace QLy_BVMB
 
         private void btnTHOAT_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close();
         }
     }
 }

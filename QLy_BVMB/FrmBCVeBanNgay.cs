@@ -113,5 +113,10 @@ namespace QLy_BVMB
             Clipboard.SetText(sb.ToString());
             MessageBox.Show("✅ Đã copy dữ liệu! Paste vào Excel để xem.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -215,5 +215,10 @@ namespace QLy_BVMB
             cboPhuongThuc.SelectedIndex = 0;
             lblGiaVe.Text = "Giá: ---";
         }
+
+        private void grpDanhSach_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
