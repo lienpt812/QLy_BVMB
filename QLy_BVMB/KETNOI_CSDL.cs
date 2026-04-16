@@ -16,7 +16,7 @@ namespace QLy_BVMB
         public SqlDataAdapter ada;
         public void KetNoi_Dulieu()
         {
-            string str = @"Data Source=DESKTOP-RAB32MF\HANG;Initial Catalog=SQL2_NHOM06_QLy_BVMB;Integrated Security=True";
+            string str = @"Data Source=ADMIN\MSSQLSERVERR;Initial Catalog=SQL2_NHOM06_QLy_BVMB;Integrated Security=True";
             cnn = new SqlConnection(str);
             cnn.Open();
         }
